@@ -1,0 +1,5 @@
+CREATE DATABASE EpiCms;
+GO
+
+CREATE DATABASE EpiCommerce;
+GO

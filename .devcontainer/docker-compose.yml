@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app:
+    env_file:
+      - .env
+
+    build: 
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      # should be defined Development-env to allow loading user-secrets located on the local computer.
+      - ASPNETCORE_ENVIRONMENT=Development
+      # - VSS_NUGET_ACCESSTOKEN=${VSS_NUGET_ACCESSTOKEN}
+      # env settings for self signed cert - https://github.com/docker/compose/issues/7146
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path="/ssl/server.crt"
+      # - ASPNETCORE_Kestrel__Certificates__Default__KeyPath="/ssl/server.key"
+
+    volumes:
+      - ../..:/workspaces:cached
+      - ${USER_SECRETS_PATH}:/root/.microsoft/usersecrets
+      - ${NUGET_AUTH_PATH}:/root/.nuget/NuGet
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+
+    # Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    # user: root
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: P@ssw0rd
+      ACCEPT_EULA: Y
+
+    ports:
+      - "1433:1433"
+
+    # Add "forwardPorts": ["1433"] to **devcontainer.json** to forward MSSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
