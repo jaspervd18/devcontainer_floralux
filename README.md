@@ -70,3 +70,19 @@ When installing the rootCA for the first time, make sure to place it under "Trus
 _Notes on Mac_
 
 When installed, open your keychain and look for the rootCA. Open the rootCA and set trust options to "always trust" instead of "system defaults".
+
+## Using Podman as an alternative to Docker Desktop
+
+1. Delete Docker Desktop from machine.
+2. Install [Podman Desktop](https://podman-desktop.io/).
+3. Follow the default configuration steps.
+4. When not done during configuration, create a podman machine:
+    * Navigate to ’Settings’ → ’Resources’.
+    * Create a new machine.
+    * Leave all the default values en only check ”User mode networking”.
+5. When not done during configuration, install docker-compose within Podman:
+    * Navigate to ’Extensions’.
+    * Install the ”Compose Extension” globaly.
+6. Within VS Code:
+    * Ctrl+Shift+P → ”Dev Containers: Settings”.
+    * Change the Docker path from ”docker” to ”podman”.
